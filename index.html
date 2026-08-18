@@ -1,0 +1,133 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>NEUROTRADE RL</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <header class="topbar">
+    <div>
+      <div class="eyebrow">REINFORCEMENT LEARNING • SIMULATOR</div>
+      <h1>NEUROTRADE RL</h1>
+      <p>Reinforcement learning for market decisions — train, test, trade and analyse.</p>
+    </div>
+    <div class="badge">Paper Trading • Educational</div>
+  </header>
+
+  <main class="container">
+    <section class="hero-grid">
+      <div class="panel chart-panel">
+        <div class="panel-head">
+          <div>
+            <span class="label">MARKET</span>
+            <h2 id="symbolTitle">NIFTY 50</h2>
+          </div>
+          <div class="price-box">
+            <span>Current</span>
+            <strong id="currentPrice">₹10,000.00</strong>
+            <small id="dayChange">+0.00%</small>
+          </div>
+        </div>
+        <div class="chart-tools">
+          <span class="chip active" id="trendChip">Trend</span>
+          <span class="chip" id="smaChip">SMA 20</span>
+          <span class="chip" id="emaChip">EMA 9</span>
+          
+        </div>
+        <svg id="stockSvg" viewBox="0 0 1000 430" preserveAspectRatio="none" aria-label="Stock trading chart"></svg>
+        <div class="legend">
+          <span><i class="dot price"></i> Price</span>
+          <span><i class="dot buy"></i> Buy</span>
+          <span><i class="dot sell"></i> Sell</span>
+          <span><i class="dot agent"></i> RL action</span>
+        </div>
+      </div>
+
+      <aside class="panel trade-panel">
+        <div class="panel-head">
+          <div><span class="label">LIVE SIMULATOR</span><h2>Trading Desk</h2></div>
+          <span id="marketStatus" class="status">MARKET OPEN</span>
+        </div>
+
+        <div class="quote">
+          <div><span>Cash</span><strong id="cash">₹1,00,000</strong></div>
+          <div><span>Shares</span><strong id="shares">0</strong></div>
+          <div><span>Portfolio</span><strong id="portfolio">₹1,00,000</strong></div>
+        </div>
+
+        <div class="trade-actions">
+          <button class="buy-btn" id="buyBtn">BUY</button>
+          <button class="sell-btn" id="sellBtn">SELL</button>
+        </div>
+        <button class="reset-btn" id="resetBtn">Reset Account</button>
+
+        <div class="decision-box">
+          <span class="label">RL DECISION</span>
+          <div class="decision-main">
+            <strong id="agentAction">HOLD</strong>
+            <span id="agentConfidence">Confidence: —</span>
+          </div>
+          <p id="agentReason">Train the agent to generate a decision.</p>
+        </div>
+      </aside>
+    </section>
+
+    <section class="metrics-grid">
+      <div class="metric"><span>Training Episodes</span><strong id="episodes">0</strong></div>
+      <div class="metric"><span>Agent Reward</span><strong id="reward">0.00</strong></div>
+      <div class="metric"><span>Win Rate</span><strong id="winRate">0%</strong></div>
+      <div class="metric"><span>Agent Return</span><strong id="agentReturn">0.00%</strong></div>
+      <div class="metric"><span>Max Drawdown</span><strong id="drawdown">0.00%</strong></div>
+    </section>
+
+    <section class="lower-grid">
+      <div class="panel">
+        <div class="panel-head">
+          <div><span class="label">REINFORCEMENT LEARNING</span><h2>Train the Q-Learning Agent</h2></div>
+          <span class="formula">Q(s,a) ← Q + α[r + γ max Q' − Q]</span>
+        </div>
+        <div class="controls">
+          <label>Episodes <input id="episodeInput" type="number" min="10" max="5000" value="500"></label>
+          <label>Learning Rate α <input id="alphaInput" type="number" min="0.01" max="1" step="0.01" value="0.15"></label>
+          <label>Discount γ <input id="gammaInput" type="number" min="0" max="1" step="0.01" value="0.90"></label>
+          <label>Exploration ε <input id="epsilonInput" type="number" min="0" max="1" step="0.01" value="0.20"></label>
+        </div>
+        <div class="train-row">
+          <button class="primary-btn" id="trainBtn">TRAIN AGENT</button>
+          <button class="secondary-btn" id="runBtn">RUN AGENT ON CHART</button>
+          <span id="trainStatus">Ready.</span>
+        </div>
+        <div class="progress"><div id="progressBar"></div></div>
+        <canvas id="rewardChart"></canvas>
+      </div>
+
+      <div class="panel">
+        <div class="panel-head">
+          <div><span class="label">HOW IT WORKS</span><h2>State → Action → Reward</h2></div>
+        </div>
+        <div class="steps">
+          <div><b>01</b><div><strong>State</strong><p>Price trend + position + cash level are converted into a compact state.</p></div></div>
+          <div><b>02</b><div><strong>Action</strong><p>The agent chooses <em>BUY</em>, <em>SELL</em>, or <em>HOLD</em>.</p></div></div>
+          <div><b>03</b><div><strong>Reward</strong><p>Portfolio value change rewards profitable decisions and penalizes losses.</p></div></div>
+          <div><b>04</b><div><strong>Learning</strong><p>Q-values are updated repeatedly until the policy improves.</p></div></div>
+        </div>
+        <div class="strategy-card">
+          <div><span class="label">STRATEGY</span><strong id="strategyName">Q-Learning Momentum</strong></div>
+          <div><span class="label">STATE</span><strong id="stateView">FLAT • NEUTRAL</strong></div>
+          <div><span class="label">RISK</span><strong id="riskView">LOW</strong></div>
+        </div>
+        <div class="decision-log" id="decisionLog">
+          <span class="label">AGENT EXECUTION LOG</span>
+          <div id="logRows"><div class="log-row"><span>System</span><b>Waiting for agent run</b></div></div>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <footer>NEUROTRADE RL • Reinforcement Learning Stock Trading Intelligence</footer>
+  <script src="script.js"></script>
+</body>
+</html>
+
